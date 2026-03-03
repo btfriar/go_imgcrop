@@ -1,4 +1,4 @@
-module github.com/friar/go_imgcrop
+module github.com/btfriar/go_imgcrop
 
 go 1.25.0
 

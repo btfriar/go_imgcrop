@@ -19,7 +19,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/friar/go_imgcrop"
+	"github.com/btfriar/go_imgcrop"
 )
 
 func main() {
