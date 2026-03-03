@@ -2,7 +2,7 @@
 
 A Go package for intelligently cropping and resizing images to specific dimensions or aspect ratios.
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/friar/go_imgcrop.svg)](https://pkg.go.dev/github.com/friar/go_imgcrop)
+[![Go Reference](https://pkg.go.dev/badge/github.com/btfriar/go_imgcrop.svg)](https://pkg.go.dev/github.com/btfriar/go_imgcrop)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Features
@@ -16,7 +16,7 @@ A Go package for intelligently cropping and resizing images to specific dimensio
 ## Installation
 
 ```bash
-go get github.com/friar/go_imgcrop
+go get github.com/btfriar/go_imgcrop
 ```
 
 ## Quick Start
@@ -27,7 +27,7 @@ package main
 import (
     "os"
     "image/jpeg"
-    "github.com/friar/go_imgcrop"
+    "github.com/btfriar/go_imgcrop"
 )
 
 func main() {
