@@ -19,8 +19,7 @@ import (
 	"strconv"
 	"strings"
 
-	// TODO: Uncomment this import once the package is ready
-	// "github.com/friar/go_imgcrop"
+	"github.com/friar/go_imgcrop"
 )
 
 func main() {
@@ -63,39 +62,36 @@ func processImage(inputPath, outputPath string, width, height int) error {
 	}
 	defer inputFile.Close()
 
-	// TODO: Uncomment and implement once the package is ready
-	/*
-		// Create options for the crop operation
-		opts := imgcrop.Options{
-			Width:   width,
-			Height:  height,
-			Quality: imgcrop.QualityHigh,
-			Anchor:  imgcrop.AnchorCenter,
-		}
+	// Create options for the crop operation
+	opts := imgcrop.Options{
+		Width:   width,
+		Height:  height,
+		Quality: imgcrop.QualityHigh,
+		Anchor:  imgcrop.AnchorCenter,
+	}
 
-		// Alternative: use the fluent API
-		// opts := imgcrop.DefaultOptions().
-		//     WithDimensions(width, height).
-		//     WithQuality(imgcrop.QualityHigh)
+	// Alternative: use the fluent API
+	// opts := imgcrop.DefaultOptions().
+	//     WithDimensions(width, height).
+	//     WithQuality(imgcrop.QualityHigh)
 
-		// Process the image
-		result, err := imgcrop.CropAndResize(inputFile, opts)
-		if err != nil {
-			return fmt.Errorf("failed to process image: %w", err)
-		}
+	// Process the image
+	result, err := imgcrop.CropAndResize(inputFile, opts)
+	if err != nil {
+		return fmt.Errorf("failed to process image: %w", err)
+	}
 
-		// Log some information about the processing
-		fmt.Printf("Original: %dx%d (%s)\n",
-			result.OriginalWidth,
-			result.OriginalHeight,
-			result.Format)
-		fmt.Printf("Cropped to: %dx%d\n",
-			result.CroppedWidth,
-			result.CroppedHeight)
-		fmt.Printf("Final size: %dx%d\n",
-			result.FinalWidth,
-			result.FinalHeight)
-	*/
+	// Log some information about the processing
+	fmt.Printf("Original: %dx%d (%s)\n",
+		result.OriginalWidth,
+		result.OriginalHeight,
+		result.Format)
+	fmt.Printf("Cropped to: %dx%d\n",
+		result.CroppedWidth,
+		result.CroppedHeight)
+	fmt.Printf("Final size: %dx%d\n",
+		result.FinalWidth,
+		result.FinalHeight)
 
 	// Create the output file
 	outputFile, err := os.Create(outputPath)
@@ -107,22 +103,14 @@ func processImage(inputPath, outputPath string, width, height int) error {
 	// Encode the result based on output file extension
 	ext := strings.ToLower(filepath.Ext(outputPath))
 
-	// TODO: Uncomment once the package is ready
-	/*
-		switch ext {
-		case ".jpg", ".jpeg":
-			err = jpeg.Encode(outputFile, result.Image, &jpeg.Options{Quality: 90})
-		case ".png":
-			err = png.Encode(outputFile, result.Image)
-		default:
-			return fmt.Errorf("unsupported output format: %s", ext)
-		}
-	*/
-
-	// Placeholder to avoid unused import errors
-	_ = jpeg.DefaultQuality
-	_ = png.DefaultCompression
-	_ = ext
+	switch ext {
+	case ".jpg", ".jpeg":
+		err = jpeg.Encode(outputFile, result.Image, &jpeg.Options{Quality: 90})
+	case ".png":
+		err = png.Encode(outputFile, result.Image)
+	default:
+		return fmt.Errorf("unsupported output format: %s", ext)
+	}
 
 	if err != nil {
 		return fmt.Errorf("failed to encode output: %w", err)
@@ -133,9 +121,6 @@ func processImage(inputPath, outputPath string, width, height int) error {
 
 // Example of using CropToAspectRatio for when you want to maintain
 // original resolution but change the shape.
-//
-// TODO: Uncomment once the package is ready
-/*
 func cropToAspectRatioExample(inputPath, outputPath string) error {
 	inputFile, err := os.Open(inputPath)
 	if err != nil {
@@ -157,4 +142,3 @@ func cropToAspectRatioExample(inputPath, outputPath string) error {
 
 	return jpeg.Encode(outputFile, result.Image, &jpeg.Options{Quality: 95})
 }
-*/

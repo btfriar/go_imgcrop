@@ -71,7 +71,7 @@ func CropAndResize(r io.Reader, opts Options) (*Result, error) {
 	originalBounds := img.Bounds()
 	targetRatio := float64(opts.Width) / float64(opts.Height)
 
-	cropRegion := calculateCropRegion(originalBounds, targetRatio)
+	cropRegion := calculateCropRegion(originalBounds, targetRatio, opts.Anchor)
 	cropped := cropImage(img, cropRegion)
 	final := resizeImage(cropped, opts.Width, opts.Height, opts.Quality)
 
@@ -103,7 +103,7 @@ func CropToAspectRatio(r io.Reader, widthRatio, heightRatio int) (*Result, error
 	originalBounds := img.Bounds()
 	targetRatio := float64(widthRatio) / float64(heightRatio)
 
-	cropRegion := calculateCropRegion(originalBounds, targetRatio)
+	cropRegion := calculateCropRegion(originalBounds, targetRatio, AnchorCenter)
 	cropped := cropImage(img, cropRegion)
 
 	return &Result{
@@ -129,9 +129,9 @@ func decodeImage(r io.Reader) (image.Image, string, error) {
 }
 
 // calculateCropRegion determines the optimal rectangle to crop from the source
-// image to achieve the target aspect ratio. It uses center-weighted cropping,
-// meaning it removes equal amounts from opposite edges.
-func calculateCropRegion(bounds image.Rectangle, targetRatio float64) image.Rectangle {
+// image to achieve the target aspect ratio. The anchor parameter controls which
+// part of the image is preserved when cropping.
+func calculateCropRegion(bounds image.Rectangle, targetRatio float64, anchor Anchor) image.Rectangle {
 	srcWidth := bounds.Dx()
 	srcHeight := bounds.Dy()
 	srcRatio := float64(srcWidth) / float64(srcHeight)
@@ -139,15 +139,33 @@ func calculateCropRegion(bounds image.Rectangle, targetRatio float64) image.Rect
 	var cropX, cropY, newWidth, newHeight int
 
 	if srcRatio > targetRatio {
+		// Image is wider than target: crop left/right
 		newHeight = srcHeight
 		newWidth = int(float64(srcHeight) * targetRatio)
-		cropX = (srcWidth - newWidth) / 2
+		excess := srcWidth - newWidth
+		switch anchor {
+		case AnchorLeft:
+			cropX = 0
+		case AnchorRight:
+			cropX = excess
+		default:
+			cropX = excess / 2
+		}
 		cropY = 0
 	} else if srcRatio < targetRatio {
+		// Image is taller than target: crop top/bottom
 		newWidth = srcWidth
 		newHeight = int(float64(srcWidth) / targetRatio)
+		excess := srcHeight - newHeight
+		switch anchor {
+		case AnchorTop:
+			cropY = 0
+		case AnchorBottom:
+			cropY = excess
+		default:
+			cropY = excess / 2
+		}
 		cropX = 0
-		cropY = (srcHeight - newHeight) / 2
 	} else {
 		return bounds
 	}

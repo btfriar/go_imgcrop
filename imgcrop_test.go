@@ -83,7 +83,7 @@ func TestCalculateCropRegion(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := calculateCropRegion(tt.bounds, tt.targetRatio)
+			got := calculateCropRegion(tt.bounds, tt.targetRatio, AnchorCenter)
 
 			if got != tt.want {
 				t.Errorf("calculateCropRegion() = %v, want %v", got, tt.want)
